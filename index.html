@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关帝灵签</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #1a0a0a, #3d1a1a, #1a0a0a);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 750px;
+            width: 100%;
+            background: linear-gradient(180deg, #f5e6d3, #e8d5c4);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            border: 3px solid #8b6914;
+        }
+        .header {
+            text-align: center;
+            padding: 15px 0 20px;
+            border-bottom: 2px solid #8b6914;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            font-size: 2.2em;
+            color: #5c1a1a;
+            letter-spacing: 8px;
+        }
+        .header p {
+            color: #7a4a3a;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        .draw-area {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+        .btn-draw {
+            background: linear-gradient(180deg, #8b0000, #5c1a1a);
+            color: #ffd700;
+            border: 2px solid #ffd700;
+            padding: 18px 45px;
+            font-size: 1.4em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            letter-spacing: 3px;
+        }
+        .btn-draw:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(139, 0, 0, 0.5);
+        }
+        .btn-draw:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .query-area {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .query-area input {
+            padding: 10px 15px;
+            border: 2px solid #8b6914;
+            border-radius: 25px;
+            font-size: 1em;
+            width: 140px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.8);
+            outline: none;
+        }
+        .query-area input:focus {
+            border-color: #5c1a1a;
+        }
+        .btn-query {
+            background: #5c1a1a;
+            color: #ffd700;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+        .btn-query:hover {
+            background: #7a1a1a;
+            transform: scale(1.05);
+        }
+        .result-container {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .sign-card {
+            background: #fff8f0;
+            border: 2px solid #8b6914;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+        .sign-header {
+            text-align: center;
+            padding-bottom: 12px;
+            border-bottom: 2px dashed #8b6914;
+        }
+        .sign-number {
+            font-size: 1.6em;
+            color: #5c1a1a;
+            font-weight: bold;
+        }
+        .sign-title {
+            font-size: 1.3em;
+            color: #2a1a0a;
+            margin: 5px 0;
+        }
+        .sign-luck {
+            display: inline-block;
+            padding: 4px 20px;
+            border-radius: 20px;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+        .luck-大吉,
+        .luck-上上 {
+            background: #ffd700;
+            color: #5c1a1a;
+        }
+        .luck-上吉 {
+            background: #ff6b35;
+            color: #fff;
+        }
+        .luck-中吉 {
+            background: #4a90d9;
+            color: #fff;
+        }
+        .luck-中平 {
+            background: #95a5a6;
+            color: #fff;
+        }
+        .luck-下下 {
+            background: #2c3e50;
+            color: #fff;
+        }
+        .luck-下吉,
+        .luck-下签 {
+            background: #8b0000;
+            color: #fff;
+        }
+        .sign-story {
+            background: rgba(139, 105, 20, 0.1);
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin: 12px 0;
+            border-left: 4px solid #8b6914;
+        }
+        .sign-story strong {
+            color: #5c1a1a;
+        }
+        .sign-poem {
+            text-align: center;
+            font-size: 1.05em;
+            color: #5c1a1a;
+            padding: 10px;
+            background: rgba(139, 105, 20, 0.08);
+            border-radius: 10px;
+            margin: 10px 0;
+            line-height: 1.8;
+        }
+        .sign-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .sign-detail-item {
+            background: rgba(255, 255, 255, 0.5);
+            padding: 8px 10px;
+            border-radius: 8px;
+            border: 1px solid #d4c5a9;
+            font-size: 0.92em;
+        }
+        .sign-detail-item .label {
+            font-weight: bold;
+            color: #5c1a1a;
+            display: block;
+            font-size: 0.85em;
+        }
+        .sign-footer {
+            text-align: center;
+            margin-top: 15px;
+            padding-top: 12px;
+            border-top: 2px dashed #8b6914;
+            color: #7a4a3a;
+            font-style: italic;
+        }
+        .history-area {
+            margin-top: 15px;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+        }
+        .history-area h3 {
+            color: #5c1a1a;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 10px;
+            background: rgba(255, 255, 255, 0.5);
+            margin: 3px 0;
+            border-radius: 5px;
+            font-size: 0.85em;
+        }
+        .history-item .h-sign {
+            color: #5c1a1a;
+            font-weight: bold;
+        }
+        .version-info {
+            text-align: center;
+            margin-top: 12px;
+            color: #7a4a3a;
+            font-size: 0.75em;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            .header h1 {
+                font-size: 1.6em;
+                letter-spacing: 4px;
+            }
+            .btn-draw {
+                padding: 14px 30px;
+                font-size: 1.1em;
+            }
+            .sign-details {
+                grid-template-columns: 1fr;
+            }
+            .query-area input {
+                width: 110px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>🏮 关帝灵签</h1>
+            <p>🙏 心诚则灵 · 有求必应</p>
+        </div>
+
+        <div class="draw-area">
+            <button class="btn-draw" onclick="drawSign()">
+                <span id="btnText">🎯 诚心求签</span>
+            </button>
+            <div class="query-area">
+                <input type="number" id="signInput" placeholder="签号 1-100" min="1" max="100">
+                <button class="btn-query" onclick="querySign()">📖 查签</button>
+            </div>
+        </div>
+
+        <div class="result-container" id="resultContainer">
+            <div class="sign-card" id="signCard"></div>
+        </div>
+
+        <div class="history-area">
+            <h3>📜 求签记录</h3>
+            <div id="historyList"></div>
+        </div>
+        <div class="version-info">📚 关帝灵签 100签</div>
+    </div>
+
+    <script>
+        // ============================================================
+        // 关帝灵签数据（前10签详细 + 后90签自动生成）
+        // ============================================================
+        const SIGNS = {};
+
+        // ----- 前10签详细数据 -----
+        const baseSigns = {
+            "1": { "签号": "第1签", "签题": "汉高祖入关", "吉凶": "大吉", "典故": "汉高祖刘邦入关破秦，建立汉朝",
+                "解析": { "总判": "巍巍独步向云间，玉殿千官第一班。", "功名": "状元及第，名扬四海。", "婚姻": "天赐良缘，百年偕老。",
+                    "求财": "财源广进，宜合作经营。", "疾病": "吉星庇佑，病愈神清。", "诉讼": "有理必胜，宜速决断。",
+                    "行人": "远人即至，音信分明。", "年成": "五谷丰登，田蚕倍收。", "求嗣": "积善之家，必生贵子。",
+                    "移居": "乔迁大吉，新宅旺运。", "失物": "东南方可寻，迟则难觅。", "出行": "遇贵提携，水路平安。",
+                    "家宅": "门庭兴旺，敬神得福。" } },
+            "2": { "签号": "第2签", "签题": "张子房游赤松", "吉凶": "上吉", "典故": "张良功成身退，随赤松子云游",
+                "解析": { "总判": "鲸鱼未化守江湖，未许升腾离碧波。", "功名": "时机未至，未来必成大器。",
+                    "婚姻": "需待良缘，日后美满。", "求财": "财运平平，未来渐丰。", "疾病": "耐心调养，逢医即愈。",
+                    "诉讼": "宜和解，拖延后得公正。", "行人": "平安未归，稍待团聚。", "年成": "收成中等，来年丰收。",
+                    "求嗣": "子嗣需等，日后聪慧。", "移居": "不宜搬迁，守旧为佳。", "失物": "暂时难寻，或可偶得。",
+                    "出行": "暂缓远行，待时顺利。", "家宅": "家运平稳，后福无穷。" } },
+            "3": { "签号": "第3签", "签题": "贾谊遇汉文帝", "吉凶": "中吉", "典故": "贾谊得汉文帝赏识，任太中大夫",
+                "解析": { "总判": "衣食自然生处有，劝君不用苦劳心。", "功名": "贵人提携，稳步晋升。",
+                    "婚姻": "媒妁之言，可成良缘。", "求财": "小财可求，大财待时。", "疾病": "行善积德，病自消退。",
+                    "诉讼": "以和为贵，争则两伤。", "行人": "途中遇贵，平安将至。", "年成": "风调雨顺，仓廪充实。",
+                    "求嗣": "诚心祈福，可得子女。", "移居": "迁居有利，择吉而动。", "失物": "失而复得，勿需忧心。",
+                    "出行": "利见贵人，宜早启程。", "家宅": "孝悌传家，门楣光耀。" } },
+            "4": { "签号": "第4签", "签题": "张翰忆鲈鱼", "吉凶": "中平", "典故": "张翰见秋风起，思吴中鲈鱼",
+                "解析": { "总判": "去年百事可相宜，若较今年时运衰。", "功名": "运势稍退，需谨慎努力。",
+                    "婚姻": "感情平淡，需多沟通。", "求财": "财运不稳，不宜投机。", "疾病": "旧病易复发，需调养。",
+                    "诉讼": "宜和解，拖延不利。", "行人": "归期延迟，耐心等待。", "年成": "收成普通，需防灾患。",
+                    "求嗣": "子嗣缘薄，诚心祈福。", "移居": "迁居无大益，暂缓为佳。", "失物": "难寻回，宜看开。",
+                    "出行": "远行多阻滞，暂不宜动。", "家宅": "家运平平，需积德行善。" } },
+            "5": { "签号": "第5签", "签题": "吕蒙正守困", "吉凶": "中吉", "典故": "吕蒙正早年贫困，后中状元官至宰相",
+                "解析": { "总判": "子有三般不自由，门庭萧索冷如秋。", "功名": "暂时困顿，后运亨通。",
+                    "婚姻": "晚婚更吉，早婚多磨。", "求财": "先难后易，秋冬转机。", "疾病": "久病逢医，终得痊愈。",
+                    "诉讼": "忍耐守时，终得公道。", "行人": "秋冬可归，耐心等待。", "年成": "先旱后雨，收成中等。",
+                    "求嗣": "命中有时终须有，诚心可求。", "移居": "守旧为佳，迁居无益。", "失物": "牛鼠日可寻回。",
+                    "出行": "秋冬顺利，春夏不宜。", "家宅": "家运先衰后盛，积善有余庆。" } },
+            "6": { "签号": "第6签", "签题": "相如完璧归赵", "吉凶": "下吉", "典故": "蔺相如智勇双全，完璧归赵",
+                "解析": { "总判": "何劳鼓瑟更吹笙，寸步如登万里程。", "功名": "小人阻碍，需防暗算。",
+                    "婚姻": "彼此猜忌，难成良缘。", "求财": "财运不佳，谨防破财。", "疾病": "病情反复，需换医调治。",
+                    "诉讼": "双方争执，难分胜负。", "行人": "途中多阻，归期难定。", "年成": "天灾人祸，收成欠佳。",
+                    "求嗣": "子嗣缘浅，需多行善。", "移居": "迁居不利，守旧为安。", "失物": "被窃难寻，宜看开。",
+                    "出行": "途中多险，不宜远行。", "家宅": "家宅不宁，需防口舌。" } },
+            "7": { "签号": "第7签", "签题": "苏武牧羊", "吉凶": "中平", "典故": "苏武北海牧羊十九年，持节不屈",
+                "解析": { "总判": "奔波役役重重险，带水拖泥又渡山。", "功名": "仕途多阻，需忍耐坚持。",
+                    "婚姻": "远距离感情，需多包容。", "求财": "辛苦得财，不宜投机。", "疾病": "久病难愈，需耐心调养。",
+                    "诉讼": "拖延日久，和解为佳。", "行人": "远行未归，音信稀少。", "年成": "农事多劳，收成平平。",
+                    "求嗣": "子嗣迟来，诚心可求。", "移居": "迁居多阻，暂不宜动。", "失物": "难寻回，宜看开。",
+                    "出行": "路途艰辛，暂缓为佳。", "家宅": "家运低迷，需多祈福。" } },
+            "8": { "签号": "第8签", "签题": "大舜耕历山", "吉凶": "上吉", "典故": "舜帝耕于历山，孝感动天",
+                "解析": { "总判": "年来耕稼苦无收，今岁田畴定有秋。", "功名": "苦尽甘来，终得成就。",
+                    "婚姻": "良缘天定，婚事可成。", "求财": "财运亨通，秋冬大利。", "疾病": "灾退病除，逢凶化吉。",
+                    "诉讼": "讼事和解，双方得利。", "行人": "平安即归，家宅团圆。", "年成": "五谷丰登，仓廪充实。",
+                    "求嗣": "积善之家，必得贵子。", "移居": "迁居大吉，新宅兴旺。", "失物": "失而复得，无需忧虑。",
+                    "出行": "路途平安，遇贵提携。", "家宅": "家宅兴旺，福星高照。" } },
+            "9": { "签号": "第9签", "签题": "宋太祖陈桥即位", "吉凶": "中吉", "典故": "赵匡胤陈桥兵变，黄袍加身",
+                "解析": { "总判": "望渠消息向长安，常把菱花仔细看。", "功名": "文书有利，晋升在即。",
+                    "婚姻": "媒妁有成，婚事可定。", "求财": "财运渐旺，宜把握机会。", "疾病": "病情好转，终得康复。",
+                    "诉讼": "文书有利，讼事得胜。", "行人": "音信将至，归期不远。", "年成": "收成有望，需防灾患。",
+                    "求嗣": "可得子女，需诚心祈福。", "移居": "迁居有利，择吉而动。", "失物": "文书类可寻回。",
+                    "出行": "出行顺利，遇贵提携。", "家宅": "家运上升，喜事临门。" } },
+            "10": { "签号": "第10签", "签题": "冉伯牛染疾", "吉凶": "中平", "典故": "冉伯牛染恶疾，孔子叹命",
+                "解析": { "总判": "病患时时命蹇衰，何须打瓦共钻龟。", "功名": "运势低迷，需待时转。",
+                    "婚姻": "婚事多磨，需耐心等待。", "求财": "财运不佳，守成为上。", "疾病": "久病难愈，需换医调治。",
+                    "诉讼": "讼事拖延，和解为佳。", "行人": "归期延迟，耐心等待。", "年成": "收成欠佳，需防灾患。",
+                    "求嗣": "子嗣缘薄，诚心可求。", "移居": "迁居无益，守旧为安。", "失物": "难寻回，宜看开。",
+                    "出行": "途中多阻，暂不宜动。", "家宅": "家宅不宁，需多祈福。" } }
+        };
+
+        // 合并前10签
+        Object.assign(SIGNS, baseSigns);
+
+        // ----- 生成 11-100 签 -----
+        const luckCycle = ["上吉", "中吉", "中平", "下下", "上吉", "中平", "下吉", "上吉", "中吉", "中平"];
+        const titles = [
+            "韩非入秦被害", "苏武牧羊", "姜太公钓鱼", "郭汾阳祝寿", "张君瑞忆莺莺",
+            "王祥卧冰", "石崇被难", "孟尝君招贤", "刘智远得岳氏", "严子陵登钓台",
+            "孙庞斗智", "李太白遇唐明皇", "吴王爱西施", "张骞误入斗牛宫", "唐明皇游月宫",
+            "邵尧夫告天", "项仲山饮马投钱", "相如题桥", "司马温公嗟困", "柳毅传书",
+            "陶渊明归隐", "孟尝君招贤", "曹操献刀", "项羽困乌江", "刘玄德入赘孙权妹",
+            "王昭君和番", "管鲍分金", "俞伯牙碎琴", "曹操赠袍", "马援征交趾",
+            "董永卖身葬父", "韩非入秦被害", "玄德公黄鹤楼赴宴", "姜太公钓鱼", "伍子胥过昭关",
+            "陶朱公三致千金", "赵子龙救阿斗", "杨贵妃自缢", "张良得黄石公书", "苏武牧羊",
+            "孔明借东风", "韩信中霸王毒箭", "李靖遇红拂女", "庄周梦蝶", "秦始皇焚书坑儒",
+            "谢安围棋赌墅", "申包胥哭秦庭", "吕洞宾炼丹", "伯牙绝弦", "范雎逃秦",
+            "蒯彻劝韩信自立", "张道陵七试赵升", "袁盎害晁错", "管宁割席", "孙膑被害",
+            "张良隐退", "项羽被困", "郭子仪拜寿", "韩非囚秦", "王昭君和番",
+            "苏武还乡", "韩信受辱", "李靖遇龙女", "范仲淹断齑画粥", "刘秀中兴",
+            "吕蒙正困窑", "李广难封", "姜太公遇文王", "宋玉悲秋", "伯夷叔齐饿死",
+            "梁灏八十中状元", "韩信受胯下之辱", "诸葛亮出山", "李密挂角读书", "孟尝君被囚",
+            "管鲍分金", "杨震暮夜却金", "范雎逃秦", "大舜耕历山", "严子陵钓富春",
+            "赵子龙救阿斗", "孔子在陈绝粮", "刘备败走白帝城", "李白醉写蛮书", "张骞泛槎",
+            "秦桧害岳飞", "曹彬下江南", "薛仁贵投军", "范增辞朝", "唐明皇游月宫"
+        ];
+
+        for (let i = 11; i <= 100; i++) {
+            if (!SIGNS[i]) {
+                const idx = (i - 11) % titles.length;
+                const lidx = i % luckCycle.length;
+                const luck = luckCycle[lidx] || "中平";
+                SIGNS[i] = {
+                    "签号": `第${i}签`,
+                    "签题": titles[idx] || `签文${i}`,
+                    "吉凶": luck,
+                    "典故": "历史典故",
+                    "解析": {
+                        "总判": "时运有轮回，天道自酬勤。",
+                        "功名": "努力不懈，终有成就。",
+                        "婚姻": "良缘需待，不可强求。",
+                        "求财": "财运渐来，守正为要。",
+                        "疾病": "调养有方，康复可期。",
+                        "诉讼": "以和为贵，息事宁人。",
+                        "行人": "归期将至，耐心等待。",
+                        "年成": "收成中上，可望丰收。",
+                        "求嗣": "诚心祈福，可得佳儿。",
+                        "移居": "迁居有利，择吉而行。",
+                        "失物": "耐心寻找，或可寻回。",
+                        "出行": "出行顺利，遇贵提携。",
+                        "家宅": "家运平稳，福泽绵长。"
+                    }
+                };
+            }
+        }
+
+        // ----- 功能代码 -----
+        let history = JSON.parse(localStorage.getItem('guandi_history') || '[]');
+
+        function renderHistory() {
+            const list = document.getElementById('historyList');
+            if (history.length === 0) {
+                list.innerHTML = '<div style="color:#7a4a3a;font-size:0.85em;">暂无记录 🙏</div>';
+                return;
+            }
+            list.innerHTML = history.slice(-10).reverse().map(h =>
+                `<div class="history-item">
+                    <span class="h-sign">${h.sign}</span>
+                    <span>《${h.title}》</span>
+                    <span style="color:#7a4a3a;font-size:0.75em;">${h.time}</span>
+                </div>`
+            ).join('');
+        }
+
+        function drawSign() {
+            const btn = document.getElementById('btnText');
+            const container = document.getElementById('resultContainer');
+            const card = document.getElementById('signCard');
+
+            btn.textContent = '🙏 求签中...';
+            btn.parentElement.disabled = true;
+
+            setTimeout(() => {
+                const num = Math.floor(Math.random() * 100) + 1;
+                const sign = SIGNS[num.toString()];
+                if (!sign) {
+                    card.innerHTML = '<p style="color:red;">❌ 抽签失败</p>';
+                    container.style.display = 'block';
+                    btn.textContent = '🎯 诚心求签';
+                    btn.parentElement.disabled = false;
+                    return;
+                }
+
+                const now = new Date();
+                history.push({
+                    sign: sign.签号,
+                    title: sign.签题,
+                    time: now.toLocaleString('zh-CN')
+                });
+                localStorage.setItem('guandi_history', JSON.stringify(history));
+                renderHistory();
+
+                const luckClass = sign.吉凶.replace(/[^\w\u4e00-\u9fff]/g, '');
+                let detailsHTML = '';
+                const exclude = ['总判'];
+                for (const [key, value] of Object.entries(sign.解析)) {
+                    if (exclude.includes(key)) continue;
+                    detailsHTML +=
+                        `<div class="sign-detail-item"><span class="label">${key}</span>${value}</div>`;
+                }
+
+                card.innerHTML = `
+                    <div class="sign-header">
+                        <div class="sign-number">${sign.签号}</div>
+                        <div class="sign-title">📜 ${sign.签题}</div>
+                        <span class="sign-luck luck-${luckClass}">${sign.吉凶}</span>
+                    </div>
+                    ${sign.典故 ? `<div class="sign-story"><strong>📖 典故：</strong>${sign.典故}</div>` : ''}
+                    <div class="sign-poem">${sign.解析.总判 || ''}</div>
+                    <div class="sign-details">${detailsHTML}</div>
+                    <div class="sign-footer">🙏 关帝圣君保佑 · 心诚则灵</div>
+                `;
+                container.style.display = 'block';
+                container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                btn.textContent = '🎯 再求一签';
+                btn.parentElement.disabled = false;
+            }, 700);
+        }
+
+        function querySign() {
+            const input = document.getElementById('signInput');
+            const num = input.value.trim();
+            if (!num || num < 1 || num > 100) {
+                alert('请输入 1-100 的签号');
+                return;
+            }
+            const sign = SIGNS[num];
+            const container = document.getElementById('resultContainer');
+            const card = document.getElementById('signCard');
+            if (!sign) {
+                card.innerHTML = `<p style="color:red;">❌ 未找到第${num}签</p>`;
+                container.style.display = 'block';
+                return;
+            }
+            const luckClass = sign.吉凶.replace(/[^\w\u4e00-\u9fff]/g, '');
+            let detailsHTML = '';
+            const exclude = ['总判'];
+            for (const [key, value] of Object.entries(sign.解析)) {
+                if (exclude.includes(key)) continue;
+                detailsHTML +=
+                    `<div class="sign-detail-item"><span class="label">${key}</span>${value}</div>`;
+            }
+            card.innerHTML = `
+                <div class="sign-header">
+                    <div class="sign-number">${sign.签号}</div>
+                    <div class="sign-title">📜 ${sign.签题}</div>
+                    <span class="sign-luck luck-${luckClass}">${sign.吉凶}</span>
+                </div>
+                ${sign.典故 ? `<div class="sign-story"><strong>📖 典故：</strong>${sign.典故}</div>` : ''}
+                <div class="sign-poem">${sign.解析.总判 || ''}</div>
+                <div class="sign-details">${detailsHTML}</div>
+                <div class="sign-footer">🙏 关帝圣君保佑 · 心诚则灵</div>
+            `;
+            container.style.display = 'block';
+            container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        document.getElementById('signInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') querySign();
+        });
+
+        renderHistory();
+    </script>
+
+</body>
+</html>
