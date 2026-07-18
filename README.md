@@ -29,3 +29,14 @@ cd guandi-sign
 
 # 3. 用浏览器打开 index.html
 # 或者使用 VS Code 的 Live Server 插件
+
+# 欢迎通过二维码访问 
+<img width="300" height="300" alt="关帝灵签github-二维码" src="https://github.com/user-attachments/assets/61e77705-c459-4808-8084-4734ab5ee2ed" />
+
+# 求签效果
+<img width="670" height="911" alt="关帝灵签github-执行效果" src="https://github.com/user-attachments/assets/1c81e2f4-4635-4ea3-a842-33af6b0822b3" />
+
+# 欢迎交流
+<img width="702" height="1057" alt="image" src="https://github.com/user-attachments/assets/2706b161-60b7-4123-801f-06a22ba12d6e" />
+
+
