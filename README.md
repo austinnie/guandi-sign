@@ -31,7 +31,7 @@ cd guandi-sign
 # 或者使用 VS Code 的 Live Server 插件
 
 # 欢迎通过二维码访问 
-![关帝灵签二维码](https://github-production-user-asset-6210df.s3.amazonaws.com/3428391/623603434-61e77705-c459-4808-8084-4734ab5ee2ed.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20260718%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260718T231921Z&X-Amz-Expires=300&X-Amz-Signature=5b2e7c6a94a042eb4a7e13a8e32321f768c0745700a87404f2663585183a748b&X-Amz-SignedHeaders=host&response-content-type=image%2Fpng)
+<img width="300" alt="关帝灵签二维码" src="https://github-production-user-asset-6210df.s3.amazonaws.com/3428391/623603434-61e77705-c459-4808-8084-4734ab5ee2ed.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20260718%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260718T231921Z&X-Amz-Expires=300&X-Amz-Signature=5b2e7c6a94a042eb4a7e13a8e32321f768c0745700a87404f2663585183a748b&X-Amz-SignedHeaders=host&response-content-type=image%2Fpng" />
 
 # 求签效果
 <img width="670" height="911" alt="关帝灵签github-执行效果" src="https://github.com/user-attachments/assets/1c81e2f4-4635-4ea3-a842-33af6b0822b3" />
